@@ -16,15 +16,22 @@ class ViewControllerViewModel: NSObject {
     var items = [Hero]()
     
     func getHeroes(completion: @escaping () ->()) {
-        APIClient.shared.fetchHeroesList { (heroDicts) in
-            guard let heroDicts = heroDicts else {return}
-            for i in 0..<heroDicts.count {
-                self.items.append(Hero(name: heroDicts[i]["name"].stringValue,
-                                       team: heroDicts[i]["team"].stringValue,
-                                       imageUrl: heroDicts[i]["imageurl"].stringValue))
-            }
-            DispatchQueue.main.async {
-                completion()
+        APIClient.shared.fetchHeroesList { (result) in
+            switch result {
+            case .Success(let heroDicts):
+                if let heroDicts = heroDicts  {
+                    for i in 0..<heroDicts.count {
+                        self.items.append(Hero(name: heroDicts[i]["name"].stringValue,
+                                               team: heroDicts[i]["team"].stringValue,
+                                               imageUrl: heroDicts[i]["imageurl"].stringValue))
+                    }
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                }
+                
+            case .Failure(let strErr):
+                print(strErr)
             }
         }
     }
