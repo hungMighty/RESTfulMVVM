@@ -40,6 +40,14 @@ class ViewControllerTableViewCell: UITableViewCell {
             }
         }
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.labelName.text = ""
+        self.labelTeam.text = ""
+        self.heroImage.af_cancelImageRequest()
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -50,14 +58,6 @@ class ViewControllerTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        self.labelName.text = ""
-        self.labelTeam.text = ""
-        self.heroImage.af_cancelImageRequest()
     }
     
 }

@@ -12,14 +12,21 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var viewModel: ViewControllerViewModel!
+    fileprivate var strLabel: UILabel?
+    fileprivate var activityIndicator: UIActivityIndicatorView?
+    fileprivate var effectView: UIView?
+    
+    fileprivate var viewModel = ViewControllerViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.register(ViewControllerTableViewCell.nib, forCellReuseIdentifier: ViewControllerTableViewCell.identifer)
-        viewModel = ViewControllerViewModel()
+        self.tableView.tableFooterView = UIView()
+        
+        self.activityIndicator("Loading API")
         viewModel.getHeroes {
+            self.stopIndicator()
             self.tableView.reloadData()
         }
     }
@@ -27,6 +34,49 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+    }
+    
+    // MARK: Utilities
+    func activityIndicator(_ title: String) {
+        strLabel?.removeFromSuperview()
+        activityIndicator?.removeFromSuperview()
+        effectView?.removeFromSuperview()
+        
+        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
+        guard let strLabel = self.strLabel else {
+            return
+        }
+        strLabel.text = title
+        strLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        strLabel.textColor = UIColor.white
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        guard let activityIndicator = self.activityIndicator else {
+            return
+        }
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+        activityIndicator.startAnimating()
+        
+        effectView = UIView(frame: CGRect(x: view.frame.midX - strLabel.frame.width / 2,
+                                          y: view.frame.midY - strLabel.frame.height / 2,
+                                          width: 160, height: 46))
+        guard let effectView = self.effectView else {
+            return
+        }
+        effectView.layer.cornerRadius = 15
+        effectView.layer.masksToBounds = true
+        effectView.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+
+        effectView.addSubview(strLabel)
+        effectView.addSubview(activityIndicator)
+        view.addSubview(effectView)
+    }
+    
+    func stopIndicator() {
+        self.activityIndicator?.stopAnimating()
+        strLabel?.removeFromSuperview()
+        activityIndicator?.removeFromSuperview()
+        effectView?.removeFromSuperview()
     }
 
     override func didReceiveMemoryWarning() {
