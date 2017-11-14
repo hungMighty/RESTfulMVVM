@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         self.tableView.tableFooterView = UIView()
         
         self.activityIndicator("Loading API")
-        viewModel.getHeroes {
+        self.viewModel.getHeroes { [unowned self] in
             self.stopIndicator()
             self.tableView.reloadData()
         }
