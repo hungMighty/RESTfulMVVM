@@ -20,9 +20,9 @@ class ViewControllerViewModel: NSObject {
             case .Success(let heroDicts):
                 if let heroDicts = heroDicts  {
                     for i in 0..<heroDicts.count {
-                        self?.items.append(Hero(name: heroDicts[i]["name"].stringValue,
-                                               team: heroDicts[i]["team"].stringValue,
-                                               imageUrl: heroDicts[i]["imageurl"].stringValue))
+                        if let hero = Hero(json: heroDicts[i]) {
+                            self?.items.append(hero)
+                        }
                     }
                     DispatchQueue.main.async {
                         completion()

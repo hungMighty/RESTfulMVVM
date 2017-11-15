@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Alamofire
+import SwiftyJSON
 
 class Hero {
     
@@ -16,6 +16,18 @@ class Hero {
     var imageUrl: String?
     
     init(name: String?, team: String?, imageUrl: String?) {
+        self.name = name
+        self.team = team
+        self.imageUrl = imageUrl
+    }
+    
+    init?(json: JSON) {
+        guard let name = json["name"].string,
+            let team = json["team"].string,
+            let imageUrl = json["imageurl"].string else {
+                return nil
+        }
+        
         self.name = name
         self.team = team
         self.imageUrl = imageUrl
