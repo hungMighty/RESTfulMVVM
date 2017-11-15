@@ -16,14 +16,11 @@ class ViewControllerViewModel: NSObject {
     
     func getHeroes(completion: @escaping () ->()) {
         APIClient.shared.fetchHeroesList { [weak self] (result) in
+            guard let strongSelf = self else {return}
             switch result {
-            case .Success(let heroDicts):
-                if let heroDicts = heroDicts  {
-                    for i in 0..<heroDicts.count {
-                        if let hero = Hero(json: heroDicts[i]) {
-                            self?.items.append(hero)
-                        }
-                    }
+            case .Success(let heroesArr):
+                if let heroesArr = heroesArr  {
+                    strongSelf.items = heroesArr
                     DispatchQueue.main.async {
                         completion()
                     }

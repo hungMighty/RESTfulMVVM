@@ -19,7 +19,7 @@ class APIClient {
     static let shared = APIClient()
     private init() {}
     
-    func fetchHeroesList(completion: @escaping (APIResult<[JSON]?>) -> Void) {
+    func fetchHeroesList(completion: @escaping (APIResult<[Hero]?>) -> Void) {
         guard let url = URL(string: "https://simplifiedcoding.net/demos/marvel/") else {
             print("Error unwrapping URL")
             return
@@ -27,9 +27,17 @@ class APIClient {
         
         Alamofire.request(url).responseJSON { (response) in
             switch response.result {
-            case .success(let value):
-                guard let heroesArr = JSON(value).array else {return}
-                completion(.Success(heroesArr))
+            case .success(_):
+                let decoder = JSONDecoder()
+                do {
+                    if let myData = response.data {
+                        let heroesArr = try decoder.decode([Hero].self, from: myData)
+                        completion(.Success(heroesArr))
+                    }
+                } catch let err {
+                    print("error trying to convert data to JSON")
+                    print(err.localizedDescription)
+                }
                 
             case .failure(let err):
                 print(err.localizedDescription)

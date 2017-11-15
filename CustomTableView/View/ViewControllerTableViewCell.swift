@@ -30,7 +30,7 @@ class ViewControllerTableViewCell: UITableViewCell {
             
             self.labelName.text = item.name
             self.labelTeam.text = item.team
-            if let imageUrl = item.imageUrl {
+            if let imageUrl = item.imageurl {
                 self.heroImage.af_setImage(
                     withURL: URL(string: imageUrl)!,
                     placeholderImage: nil,

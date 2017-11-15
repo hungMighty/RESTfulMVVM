@@ -9,16 +9,16 @@
 import Foundation
 import SwiftyJSON
 
-class Hero {
+class Hero: Codable {
     
     var name: String?
     var team: String?
-    var imageUrl: String?
+    var imageurl: String?
     
     init(name: String?, team: String?, imageUrl: String?) {
         self.name = name
         self.team = team
-        self.imageUrl = imageUrl
+        self.imageurl = imageUrl
     }
     
     init?(json: JSON) {
@@ -30,7 +30,7 @@ class Hero {
         
         self.name = name
         self.team = team
-        self.imageUrl = imageUrl
+        self.imageurl = imageUrl
     }
     
 }
