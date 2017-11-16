@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-class Hero: Codable {
+struct Hero: Codable {
     
     var name: String?
     var team: String?
