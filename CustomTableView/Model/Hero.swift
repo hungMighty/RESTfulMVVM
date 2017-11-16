@@ -15,22 +15,4 @@ struct Hero: Codable {
     var team: String?
     var imageurl: String?
     
-    init(name: String?, team: String?, imageUrl: String?) {
-        self.name = name
-        self.team = team
-        self.imageurl = imageUrl
-    }
-    
-    init?(json: JSON) {
-        guard let name = json["name"].string,
-            let team = json["team"].string,
-            let imageUrl = json["imageurl"].string else {
-                return nil
-        }
-        
-        self.name = name
-        self.team = team
-        self.imageurl = imageUrl
-    }
-    
 }
