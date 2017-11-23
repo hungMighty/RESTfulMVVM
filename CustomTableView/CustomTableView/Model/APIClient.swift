@@ -19,7 +19,46 @@ class APIClient {
     static let shared = APIClient()
     private init() {}
     
-    func fetchHeroesList(completion: @escaping (APIResult<[Hero]?>) -> Void) {
+    fileprivate func errorHandling(errParam: Error) {
+        guard let err = errParam as? AFError else {
+            if let urlErr = errParam as? URLError {
+                print("URLError occurred: \(urlErr)")
+            } else {
+                print("Unknown error: \(errParam)")
+            }
+            return
+        }
+        
+        switch err {
+        case .invalidURL(let url):
+            print("Invalid URL: \(url) - \(err.localizedDescription)")
+        case .parameterEncodingFailed(let reason):
+            print("Parameter encoding failed: \(err.localizedDescription)")
+            print("Failure reason: \(reason)")
+        case .multipartEncodingFailed(let reason):
+            print("Multipart encoding failed: \(err.localizedDescription)")
+            print("Failure Reason: \(reason)")
+        case .responseValidationFailed(let reason):
+            print("Response validation failed: \(err.localizedDescription)")
+            print("Failure Reason: \(reason)")
+            switch reason {
+            case .dataFileNil, .dataFileReadFailed:
+                print("Downloaded file could not be read")
+            case .missingContentType(let acceptableContentTypes):
+                print("Content Type Missing: \(acceptableContentTypes)")
+            case .unacceptableContentType(let acceptableContentTypes, let responseContentType):
+                print("Response content type: \(responseContentType) was unacceptable: \(acceptableContentTypes)")
+            case .unacceptableStatusCode(let code):
+                print("Response status code was unacceptable: \(code)")
+            }
+            
+        case .responseSerializationFailed(let reason):
+            print("Response serialization failed: \(err.localizedDescription)")
+            print("Failure Reason: \(reason)")
+        }
+    }
+    
+    func fetchHeroesList(completion: @escaping (APIResult<[Hero]>) -> Void) {
         guard let url = URL(string: "https://simplifiedcoding.net/demos/marvel/") else {
             print("Error unwrapping URL")
             return
@@ -40,7 +79,7 @@ class APIClient {
                 }
                 
             case .failure(let err):
-                print(err.localizedDescription)
+                self.errorHandling(errParam: err)
             }
         }
     }

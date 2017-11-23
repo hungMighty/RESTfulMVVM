@@ -19,11 +19,9 @@ class ViewControllerViewModel: NSObject {
             guard let strongSelf = self else {return}
             switch result {
             case .Success(let heroesArr):
-                if let heroesArr = heroesArr  {
-                    strongSelf.items = heroesArr
-                    DispatchQueue.main.async {
-                        completion()
-                    }
+                strongSelf.items = heroesArr
+                DispatchQueue.main.async {
+                    completion()
                 }
                 
             case .Failure(let strErr):
