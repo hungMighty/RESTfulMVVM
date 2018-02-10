@@ -58,6 +58,17 @@ class APIClient {
         }
     }
     
+    // MARK: - If Wifi then we can upload images
+    func checkIsReachableViaWifi() -> Bool {
+        guard let connectionState = NetworkReachabilityManager(host: "https://simplifiedcoding.net/demos/marvel/") else {
+            print("Fail to create connection manager")
+            return false
+        }
+        
+        print("Is reachable via Wifi? \(connectionState.isReachableOnEthernetOrWiFi)")
+        return connectionState.isReachableOnEthernetOrWiFi
+    }
+    
     func fetchHeroesList(completion: @escaping (APIResult<[Hero]>) -> Void) {
         guard let url = URL(string: "https://simplifiedcoding.net/demos/marvel/") else {
             print("Error unwrapping URL")
@@ -76,10 +87,12 @@ class APIClient {
                 } catch let err {
                     print("error trying to convert data to JSON")
                     print(err.localizedDescription)
+                    completion(.Failure("Server returned wrong data format"))
                 }
                 
             case .failure(let err):
                 self.errorHandling(errParam: err)
+                completion(.Failure(err.localizedDescription))
             }
         }
     }

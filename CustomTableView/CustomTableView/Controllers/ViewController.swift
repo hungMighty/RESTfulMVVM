@@ -25,8 +25,14 @@ class ViewController: UIViewController {
         self.tableView.tableFooterView = UIView()
         
         self.activityIndicator("Loading API")
-        self.viewModel.getHeroes { [unowned self] in
+        self.viewModel.getHeroes { [unowned self] errMess in
             self.stopIndicator()
+            if let errMess = errMess {
+                let alert = UIAlertController(title: "Error!", message: errMess,
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
             self.tableView.reloadData()
         }
     }

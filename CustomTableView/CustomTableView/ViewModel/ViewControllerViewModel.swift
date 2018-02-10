@@ -14,18 +14,19 @@ class ViewControllerViewModel: NSObject {
     
     var items = [Hero]()
     
-    func getHeroes(completion: @escaping () ->()) {
+    func getHeroes(completion: @escaping (_ errMess: String?) -> ()) {
         APIClient.shared.fetchHeroesList { [weak self] (result) in
             guard let strongSelf = self else {return}
             switch result {
             case .Success(let heroesArr):
                 strongSelf.items = heroesArr
                 DispatchQueue.main.async {
-                    completion()
+                    completion(nil)
                 }
                 
             case .Failure(let strErr):
                 print(strErr)
+                completion(strErr)
             }
         }
     }
