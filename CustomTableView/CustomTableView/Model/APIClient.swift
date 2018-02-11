@@ -8,6 +8,7 @@
 
 import Alamofire
 import SwiftyJSON
+import CoreTelephony
 
 enum APIResult<T> {
     case Success(T)
@@ -59,12 +60,44 @@ class APIClient {
     }
     
     // MARK: - If Wifi then we can upload images
+    
+    func isReachableViaCellular() -> Bool {
+        let networkInfo = CTTelephonyNetworkInfo()
+        let networkString = networkInfo.currentRadioAccessTechnology
+        // Access Tech wiki:
+        // https://stackoverflow.com/questions/25405566/mapping-ios-7-constants-to-2g-3g-4g-lte-etc
+        
+        
+        // ReachableViaWWAN
+        if
+            /* LTE (4G) */
+            networkString == CTRadioAccessTechnologyLTE ||
+                
+                /* 3G */
+                networkString == CTRadioAccessTechnologyWCDMA ||
+                networkString == CTRadioAccessTechnologyHSDPA ||
+                networkString == CTRadioAccessTechnologyHSUPA ||
+                networkString == CTRadioAccessTechnologyCDMAEVDORev0 ||
+                networkString == CTRadioAccessTechnologyCDMAEVDORevA ||
+                networkString == CTRadioAccessTechnologyCDMAEVDORevB ||
+                networkString == CTRadioAccessTechnologyeHRPD ||
+                
+                /* EDGE (2G) */
+                networkString == CTRadioAccessTechnologyGPRS ||
+                networkString == CTRadioAccessTechnologyEdge ||
+                networkString == CTRadioAccessTechnologyCDMA1x {
+            return true
+        }
+        return false
+    }
+    
     func checkIsReachableViaWifi() -> Bool {
         guard let connectionState = NetworkReachabilityManager(host: "https://simplifiedcoding.net/demos/marvel/") else {
             print("Fail to create connection manager")
             return false
         }
         
+        // The other is WWAN which is for 3g and 4g
         print("Is reachable via Wifi? \(connectionState.isReachableOnEthernetOrWiFi)")
         return connectionState.isReachableOnEthernetOrWiFi
     }
