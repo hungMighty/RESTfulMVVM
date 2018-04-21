@@ -147,7 +147,6 @@
 				3C22F65C1FB9A82E0021F2FA /* Frameworks */,
 				3C22F65D1FB9A82E0021F2FA /* Resources */,
 				F7D5B7C791EA0ABCEF3E9B22 /* [CP] Embed Pods Frameworks */,
-				0ADE6A4EA905054D6F23E196 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -207,21 +206,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0ADE6A4EA905054D6F23E196 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CustomTableView/Pods-CustomTableView-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		ED5A647CB30B8BDE72485BCC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
